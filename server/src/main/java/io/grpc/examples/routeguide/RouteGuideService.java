@@ -30,16 +30,6 @@ public class RouteGuideService extends RouteGuideGrpc.RouteGuideImplBase {
         responseObserver.onCompleted();
     }
 
-    private Feature checkFeature(Point location) {
-        for (Feature feature : features) {
-            if (feature.getLocation().getLatitude() == location.getLatitude()
-                    && feature.getLocation().getLongitude() == location.getLongitude()) {
-                return feature;
-            }
-        }
-        return Feature.newBuilder().setName("").setLocation(location).build();
-    }
-
     @Override
     public void listFeatures(Rectangle request, StreamObserver<Feature> responseObserver) {
         int left = Math.min(request.getLo().getLongitude(), request.getHi().getLongitude());
@@ -128,6 +118,16 @@ public class RouteGuideService extends RouteGuideGrpc.RouteGuideImplBase {
                 responseObserver.onCompleted();
             }
         };
+    }
+
+    private Feature checkFeature(Point location) {
+        for (Feature feature : features) {
+            if (feature.getLocation().getLatitude() == location.getLatitude()
+                    && feature.getLocation().getLongitude() == location.getLongitude()) {
+                return feature;
+            }
+        }
+        return Feature.newBuilder().setName("").setLocation(location).build();
     }
 
     private List<RouteNote> getOrCreateNotes(Point location) {
